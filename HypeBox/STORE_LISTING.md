@@ -58,9 +58,9 @@ Name and subtitle words (HypeBox, Bluetooth, speaker, mic, phone) are already in
 
 ## URLs
 
-- Privacy Policy URL: https://lesliepaul.me/BTmic/privacy.html
-- Support URL: https://lesliepaul.me/BTmic/support.html
-- Marketing URL: https://lesliepaul.me/BTmic/
+- Privacy Policy URL: https://leslie-23.github.io/BTmic/privacy.html
+- Support URL: https://leslie-23.github.io/BTmic/support.html
+- Marketing URL: https://leslie-23.github.io/BTmic/
 
 ## Category
 
@@ -96,10 +96,10 @@ Paste this into App Review Information > Notes:
 - [ ] **Create the app record** in App Store Connect with the name, bundle ID, SKU (e.g. `hypebox-ios`) and primary language.
 - [ ] **Fill in `eas.json` submit.production**: `appleId`, `ascAppId` (the numeric Apple ID on the App Information page) and `appleTeamId`.
 - [ ] **Privacy nutrition label**: choose "Data Not Collected". Checked in the code: no network calls, no analytics, no crash reporting, no ads SDKs. Re-check if any of that gets added.
-- [x] **Privacy policy URL**: https://lesliepaul.me/BTmic/privacy.html (source in `docs/privacy.html`, served by GitHub Pages from `/docs` on `main`). Paste into App Store Connect > App Privacy > Privacy Policy URL.
-- [x] **Support URL**: https://lesliepaul.me/BTmic/support.html (source in `docs/support.html`). Paste into the version's Support URL field.
-- [x] **Marketing URL** (optional): https://lesliepaul.me/BTmic/
-- [ ] **Fix DNS for lesliepaul.me.** GitHub Pages is on (main, /docs) and built, but the account's custom domain `lesliepaul.me` doesn't resolve, so the URLs above don't load yet. Point the domain at GitHub Pages (A records 185.199.108.153 / .109 / .110 / .111) or remove the custom domain from the Leslie-23.github.io repo so it falls back to leslie-23.github.io/BTmic. Check all three URLs load before submitting.
+- [x] **Privacy policy URL**: https://leslie-23.github.io/BTmic/privacy.html (source in `docs/privacy.html`, served by GitHub Pages from `/docs` on `main`). Paste into App Store Connect > App Privacy > Privacy Policy URL.
+- [x] **Support URL**: https://leslie-23.github.io/BTmic/support.html (source in `docs/support.html`). Paste into the version's Support URL field.
+- [x] **Marketing URL** (optional): https://leslie-23.github.io/BTmic/
+- [x] **GitHub Pages** is on (main, /docs). Check all three URLs load before submitting.
 - [x] **Screenshots**: 6.9" set done in `marketing/appstore/6.9/` (1320 x 2868, re-render with `marketing/render-appstore.sh`). 6.9" is required. Add 6.5" (1284 x 2778 or 1242 x 2688) as well to cover older devices. iPad isn't needed because `supportsTablet` is off.
 - [x] **Export compliance**: already answered in `app.json` (`ITSAppUsesNonExemptEncryption: false`), so App Store Connect won't ask.
 - [ ] **Age rating** questionnaire (see above).
