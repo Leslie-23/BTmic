@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HypeBox Support</title>
+<meta name="description" content="How to use HypeBox, fixes for common problems, and how to get help.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div class="wrap">
+  <a class="brand" href="./">HYPEBOX</a>
+  <nav><a href="support.html" aria-current="page">Support</a><a href="privacy.html">Privacy</a></nav>
+</div></header>
+
+<main><div class="wrap">
+  <div class="tag">Support</div>
+  <h1>Need a <mark>hand?</mark></h1>
+  <p class="lead">HypeBox turns your phone into a mic for the Bluetooth speaker you already own. Hold the button, talk, and your voice comes out of the speaker while your music keeps playing.</p>
+
+  <h2>How to use it</h2>
+  <ol class="steps">
+    <li><span>Connect your iPhone to a Bluetooth speaker in <strong>Settings &gt; Bluetooth</strong>.</span></li>
+    <li><span>Start your music in any app, if you want some. HypeBox plays on top of it.</span></li>
+    <li><span>Open HypeBox and allow microphone access the first time it asks.</span></li>
+    <li><span>Pick a delay from 1 to 5 seconds at the bottom of the screen. Shorter feels closer to live. Longer is steadier on slower speakers.</span></li>
+    <li><span>Press and hold the big button and talk. Let go when you're done.</span></li>
+  </ol>
+
+  <div class="callout">HypeBox is not zero-latency. You'll hear your voice after the delay you picked. It's built for announcements, toasts and hype, not live singing.</div>
+
+  <h2>Troubleshooting</h2>
+
+  <h3>There's no sound from my speaker</h3>
+  <p>Check that the speaker is connected in <strong>Settings &gt; Bluetooth</strong> and shows as the audio output in Control Center. Then turn up the volume on both the phone and the speaker. Remember you'll only hear yourself after the delay, so hold the button for at least a couple of seconds.</p>
+
+  <h3>I hear an echo when no speaker is connected</h3>
+  <p>That's expected. With no Bluetooth speaker connected, HypeBox plays your voice through the iPhone's own speaker, so you hear yourself a moment later. Connect a Bluetooth speaker and it goes away.</p>
+
+  <h3>I denied microphone access by mistake</h3>
+  <p>Go to <strong>Settings &gt; HypeBox &gt; Microphone</strong> and switch it on, then reopen the app.</p>
+
+  <h3>Why is there a delay?</h3>
+  <p>iPhones can't record from the mic and send audio to a Bluetooth speaker at the same time without dropping to low-quality call audio. So HypeBox records a short clip, then switches to playback and plays that clip through the speaker, over and over while you hold the button. The delay you pick is the length of each clip.</p>
+
+  <h3>Does HypeBox record or upload what I say?</h3>
+  <p>No. Each clip is only kept long enough to play it, then it's deleted. Nothing leaves your phone. See the <a href="privacy.html">privacy policy</a> for details.</p>
+
+  <h2>Contact</h2>
+  <p>Found a bug or have a question? Open an issue on GitHub. Tell me your iPhone model, iOS version and speaker model if it's a sound problem.</p>
+  <!-- CONTACT EMAIL: add a support email address here later if you want one, e.g.
+       <p>Or email <a href="mailto:you@example.com">you@example.com</a>.</p> -->
+  <a class="btn" href="https://github.com/Leslie-23/BTmic/issues">Open a GitHub issue</a>
+</div></main>
+
+<footer><div class="wrap">
+  <span>HypeBox by Leslie Paul Ajayi</span>
+  <span><a href="support.html">Support</a> &nbsp; <a href="privacy.html">Privacy</a></span>
+</div></footer>
+</body>
+</html>

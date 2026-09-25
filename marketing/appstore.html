@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!-- App Store screenshots, 6.9" (1320x2868). Render: ./render-appstore.sh
+     Raw captures in appstore/raw/ come from the iPhone 17 Pro Max simulator. -->
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#0A0A0F;--paper:#F4F1EA;--red:#FF3A3A;--mute:#8A8A96}
+html,body{width:1320px;height:2868px;overflow:hidden;background:var(--ink);font-family:Inter,Helvetica,Arial,sans-serif;color:var(--paper)}
+.slide{display:none;position:relative;width:1320px;height:2868px;padding:170px 110px 0;overflow:hidden}
+.slide.on{display:block}
+.tag{font-weight:800;font-size:40px;letter-spacing:8px;color:var(--mute)}
+h1{font-weight:900;font-size:150px;line-height:1.0;letter-spacing:-6px;margin-top:36px}
+mark{display:inline-block;background:var(--red);color:#fff;padding:0 .1em .06em;line-height:.95}
+.lead{font-weight:500;font-size:52px;line-height:1.3;color:#C9C6BE;margin-top:44px;max-width:1060px}
+/* screenshot sits on a solid block, like the talk pad in the app */
+.shot{position:absolute;left:160px;width:1000px}
+.shot .base{position:absolute;inset:0;background:var(--red);transform:translate(22px,22px)}
+.shot img{position:relative;display:block;width:100%;border:10px solid var(--paper)}
+.down{top:1060px}
+.up{top:1060px;height:1700px}
+.up .clip{position:relative;height:100%;overflow:hidden;border:10px solid var(--paper)}
+.up .clip img{position:absolute;left:0;bottom:0;border:none}
+</style></head><body>
+
+<section class="slide" id="s1">
+ <div class="tag">HYPEBOX</div>
+ <h1>Your phone is now a <mark>mic.</mark></h1>
+ <p class="lead">Your voice comes out of the Bluetooth speaker.</p>
+ <div class="shot down"><div class="base"></div><img src="appstore/raw/live.png"></div>
+</section>
+
+<section class="slide" id="s2">
+ <div class="tag">PUSH TO TALK</div>
+ <h1>Hold to talk. <mark>Let go</mark> to stop.</h1>
+ <p class="lead">The mic is only on while your thumb is down.</p>
+ <div class="shot down"><div class="base"></div><img src="appstore/raw/idle.png"></div>
+</section>
+
+<section class="slide" id="s3">
+ <div class="tag">NO PAUSING</div>
+ <h1>Talk over the <mark>music.</mark></h1>
+ <p class="lead">The playlist keeps going. Shout-outs, toasts, announcements.</p>
+ <div class="shot down"><div class="base"></div><img src="appstore/raw/onboarding.png"></div>
+</section>
+
+<section class="slide" id="s4">
+ <div class="tag">1 TO 5 SECONDS</div>
+ <h1>Dial in the <mark>delay.</mark></h1>
+ <p class="lead">Slower speakers like a longer clip. Pick what sounds clean.</p>
+ <div class="shot up"><div class="base"></div><div class="clip"><img src="appstore/raw/idle.png"></div></div>
+</section>
+
+<script>
+var s=new URLSearchParams(location.search).get('s')||'1';
+document.getElementById('s'+s).classList.add('on');
+</script>
+</body></html>

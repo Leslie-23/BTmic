@@ -56,6 +56,12 @@ microphone,party,megaphone,announce,PA,loudspeaker,hype,DJ,toast,voice,birthday,
 
 Name and subtitle words (HypeBox, Bluetooth, speaker, mic, phone) are already indexed, so they're left out here on purpose.
 
+## URLs
+
+- Privacy Policy URL: https://leslie-23.github.io/BTmic/privacy.html
+- Support URL: https://leslie-23.github.io/BTmic/support.html
+- Marketing URL: https://leslie-23.github.io/BTmic/
+
 ## Category
 
 - Primary: **Music**
@@ -90,10 +96,12 @@ Paste this into App Review Information > Notes:
 - [ ] **Create the app record** in App Store Connect with the name, bundle ID, SKU (e.g. `hypebox-ios`) and primary language.
 - [ ] **Fill in `eas.json` submit.production**: `appleId`, `ascAppId` (the numeric Apple ID on the App Information page) and `appleTeamId`.
 - [ ] **Privacy nutrition label**: choose "Data Not Collected". Checked in the code: no network calls, no analytics, no crash reporting, no ads SDKs. Re-check if any of that gets added.
-- [ ] **Privacy policy URL** (required for every app, even ones that collect nothing). A one-page site saying "HypeBox does not collect, store or share any data. The microphone is used only while you hold the button to play your voice through your speaker." is enough.
-- [ ] **Support URL** (required). Can be the same site with a contact email.
-- [ ] **Screenshots**: 6.9" (1320 x 2868 or 1290 x 2796 portrait) is required. Add 6.5" (1284 x 2778 or 1242 x 2688) as well to cover older devices. iPad isn't needed because `supportsTablet` is off.
-- [ ] **Export compliance**: already answered in `app.json` (`ITSAppUsesNonExemptEncryption: false`), so App Store Connect won't ask.
+- [x] **Privacy policy URL**: https://leslie-23.github.io/BTmic/privacy.html (source in `docs/privacy.html`, served by GitHub Pages from `/docs` on `main`). Paste into App Store Connect > App Privacy > Privacy Policy URL.
+- [x] **Support URL**: https://leslie-23.github.io/BTmic/support.html (source in `docs/support.html`). Paste into the version's Support URL field.
+- [x] **Marketing URL** (optional): https://leslie-23.github.io/BTmic/
+- [ ] **Turn on GitHub Pages** for the repo (Settings > Pages > Deploy from a branch > `main` / `/docs`) and check all three URLs load before submitting.
+- [x] **Screenshots**: 6.9" set done in `marketing/appstore/6.9/` (1320 x 2868, re-render with `marketing/render-appstore.sh`). 6.9" is required. Add 6.5" (1284 x 2778 or 1242 x 2688) as well to cover older devices. iPad isn't needed because `supportsTablet` is off.
+- [x] **Export compliance**: already answered in `app.json` (`ITSAppUsesNonExemptEncryption: false`), so App Store Connect won't ask.
 - [ ] **Age rating** questionnaire (see above).
 - [ ] **Pricing and availability**: pick price and countries.
 - [ ] **Test on a real iPhone with a real Bluetooth speaker** before submitting (TestFlight build via `eas build -p ios --profile production` then `eas submit -p ios`).

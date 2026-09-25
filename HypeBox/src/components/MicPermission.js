@@ -16,9 +16,12 @@ export default function MicPermission({ onAllow, canAskAgain }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.top}>
         <Text style={styles.tag}>HYPEBOX</Text>
-        <Text style={styles.h1}>Your phone is now a</Text>
-        <View style={styles.mark}>
-          <Text style={[styles.h1, styles.markText]}>mic.</Text>
+        <Text style={styles.h1}>Your phone is now</Text>
+        <View style={styles.markRow}>
+          <Text style={styles.h1}>a </Text>
+          <View style={styles.mark}>
+            <Text style={[styles.h1, styles.markText]}>mic.</Text>
+          </View>
         </View>
         <Text style={styles.lead}>
           Hold to talk and your voice comes out of the Bluetooth speaker, even
@@ -85,11 +88,14 @@ const styles = StyleSheet.create({
     letterSpacing: -1.8,
     color: COLORS.paper,
   },
+  markRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+  },
   mark: {
-    alignSelf: 'flex-start',
     backgroundColor: COLORS.red,
     paddingHorizontal: 6,
-    marginTop: 4,
   },
   markText: {
     color: '#fff',
