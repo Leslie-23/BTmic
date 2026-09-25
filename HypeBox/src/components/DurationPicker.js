@@ -1,32 +1,33 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { COLORS } from '../constants/theme';
+import { COLORS, FONTS } from '../constants/theme';
 
 export default function DurationPicker({ options, selected, onChange, disabled }) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>DELAY</Text>
-      <View style={styles.row}>
-        {options.map((sec) => {
+    <View style={[styles.container, disabled && styles.disabled]}>
+      <View style={styles.header}>
+        <Text style={styles.label}>DELAY</Text>
+        <Text style={styles.caption}>Longer is steadier on slow speakers</Text>
+      </View>
+      <View style={styles.row} accessibilityRole="radiogroup">
+        {options.map((sec, i) => {
           const isActive = sec === selected;
           return (
             <Pressable
               key={sec}
-              onPress={() => !disabled && onChange(sec)}
+              disabled={disabled}
+              onPress={() => onChange(sec)}
+              accessibilityRole="radio"
+              accessibilityState={{ selected: isActive, disabled }}
+              accessibilityLabel={`${sec} second delay`}
               style={[
-                styles.chip,
-                isActive && styles.chipActive,
-                disabled && styles.chipDisabled,
+                styles.cell,
+                i > 0 && styles.cellDivider,
+                isActive && styles.cellActive,
               ]}
             >
-              <Text
-                style={[
-                  styles.chipText,
-                  isActive && styles.chipTextActive,
-                ]}
-              >
-                {sec}s
-              </Text>
+              <Text style={[styles.num, isActive && styles.numActive]}>{sec}</Text>
+              <Text style={[styles.unit, isActive && styles.numActive]}>SEC</Text>
             </Pressable>
           );
         })}
@@ -37,42 +38,58 @@ export default function DurationPicker({ options, selected, onChange, disabled }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    gap: 8,
+    gap: 10,
+  },
+  disabled: {
+    opacity: 0.35,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
   },
   label: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: COLORS.dimText,
-    letterSpacing: 2,
+    fontFamily: FONTS.black,
+    fontSize: 12,
+    letterSpacing: 2.5,
+    color: COLORS.paper,
+  },
+  caption: {
+    fontFamily: FONTS.medium,
+    fontSize: 12,
+    color: COLORS.mute,
   },
   row: {
     flexDirection: 'row',
-    gap: 8,
+    borderWidth: 2,
+    borderColor: COLORS.line,
   },
-  chip: {
-    width: 44,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: COLORS.surface,
+  cell: {
+    flex: 1,
+    height: 56,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.05)',
   },
-  chipActive: {
-    backgroundColor: COLORS.standby,
-    borderColor: COLORS.onAir,
+  cellDivider: {
+    borderLeftWidth: 2,
+    borderLeftColor: COLORS.line,
   },
-  chipDisabled: {
-    opacity: 0.4,
+  cellActive: {
+    backgroundColor: COLORS.paper,
   },
-  chipText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: COLORS.dimText,
+  num: {
+    fontFamily: FONTS.black,
+    fontSize: 20,
+    color: COLORS.mute,
   },
-  chipTextActive: {
-    color: COLORS.text,
+  unit: {
+    fontFamily: FONTS.heavy,
+    fontSize: 9,
+    letterSpacing: 1.5,
+    color: COLORS.mute,
+    marginTop: 1,
+  },
+  numActive: {
+    color: COLORS.ink,
   },
 });

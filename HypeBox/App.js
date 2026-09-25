@@ -1,10 +1,17 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { LinearGradient } from 'expo-linear-gradient';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
+import {
+  useFonts,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_800ExtraBold,
+  Inter_900Black,
+} from '@expo-google-fonts/inter';
 
-import { COLORS } from './src/constants/theme';
+import { COLORS, FONTS, SPACE } from './src/constants/theme';
 import usePTT from './src/hooks/usePTT';
 import PTTButton from './src/components/PTTButton';
 import StatusBadge from './src/components/StatusBadge';
@@ -12,8 +19,25 @@ import MicPermission from './src/components/MicPermission';
 import DurationPicker from './src/components/DurationPicker';
 
 export default function App() {
+  return (
+    <SafeAreaProvider>
+      <StatusBar style="light" />
+      <Main />
+    </SafeAreaProvider>
+  );
+}
+
+function Main() {
+  const [fontsLoaded] = useFonts({
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_800ExtraBold,
+    Inter_900Black,
+  });
+
   const {
     hasPermission,
+    canAskAgain,
     requestPermission,
     isTalking,
     voiceLevel,
@@ -25,21 +49,12 @@ export default function App() {
     changeDuration,
   } = usePTT();
 
-  if (hasPermission === null) {
-    return (
-      <View style={styles.loading}>
-        <StatusBar style="light" />
-      </View>
-    );
+  if (!fontsLoaded || hasPermission === null) {
+    return <View style={styles.blank} />;
   }
 
   if (!hasPermission) {
-    return (
-      <>
-        <StatusBar style="light" />
-        <MicPermission onAllow={requestPermission} />
-      </>
-    );
+    return <MicPermission onAllow={requestPermission} canAskAgain={canAskAgain} />;
   }
 
   const handlePressIn = async () => {
@@ -57,26 +72,23 @@ export default function App() {
   };
 
   return (
-    <LinearGradient
-      colors={[COLORS.background, '#0F0F18', COLORS.background]}
-      style={styles.container}
-    >
-      <StatusBar style="light" />
-
-      <View style={styles.top}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.wordmark}>HYPEBOX</Text>
         <StatusBadge isActive={isTalking} />
       </View>
 
-      <View style={styles.center}>
+      <View style={styles.pad}>
         <PTTButton
           isTalking={isTalking}
           voiceLevel={voiceLevel}
+          durationSec={durationSec}
           onPressIn={handlePressIn}
           onPressOut={handlePressOut}
         />
       </View>
 
-      <View style={styles.bottom}>
+      <View style={styles.footer}>
         <DurationPicker
           options={durationOptions}
           selected={durationSec}
@@ -85,51 +97,61 @@ export default function App() {
         />
         <View style={styles.hintRow}>
           {error ? (
-            <Text style={styles.errorText}>{error}</Text>
+            <Text style={[styles.hint, styles.error]}>{error}</Text>
           ) : (
             <Text style={styles.hint}>
               {isTalking
-                ? `~${durationSec}s delay to Bluetooth speaker`
-                : 'Audio routes to active Bluetooth speaker'}
+                ? `Your voice reaches the speaker about ${durationSec}s after you say it.`
+                : 'Plays through whatever speaker your phone is connected to.'}
             </Text>
           )}
         </View>
       </View>
-    </LinearGradient>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  loading: {
+  blank: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.ink,
   },
   container: {
     flex: 1,
+    backgroundColor: COLORS.ink,
+    paddingHorizontal: SPACE.gutter,
   },
-  top: {
-    paddingTop: 60,
+  header: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 12,
+    paddingBottom: 24,
   },
-  center: {
+  wordmark: {
+    fontFamily: FONTS.black,
+    fontSize: 20,
+    letterSpacing: 4,
+    color: COLORS.paper,
+  },
+  pad: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  bottom: {
-    paddingBottom: 50,
-    alignItems: 'center',
+  footer: {
+    paddingTop: 28,
+    paddingBottom: 12,
     gap: 16,
   },
   hintRow: {
-    alignItems: 'center',
+    minHeight: 36,
   },
   hint: {
+    fontFamily: FONTS.medium,
     fontSize: 13,
-    color: COLORS.dimText,
+    lineHeight: 18,
+    color: COLORS.mute,
   },
-  errorText: {
-    fontSize: 13,
-    color: COLORS.onAir,
+  error: {
+    color: COLORS.red,
   },
 });

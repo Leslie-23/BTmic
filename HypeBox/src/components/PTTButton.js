@@ -1,122 +1,101 @@
 import React, { useRef, useEffect } from 'react';
 import { View, Text, Pressable, Animated, StyleSheet } from 'react-native';
-import { COLORS, SIZES } from '../constants/theme';
+import { COLORS, FONTS, SPACE } from '../constants/theme';
+import LevelMeter from './LevelMeter';
 
-export default function PTTButton({ isTalking, voiceLevel, onPressIn, onPressOut }) {
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-  const glowAnim = useRef(new Animated.Value(0)).current;
+// A physical-feeling talk key: the pad sits lifted off a solid block and
+// sinks flush into it while held.
+export default function PTTButton({ isTalking, voiceLevel, durationSec, onPressIn, onPressOut }) {
+  const press = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    if (isTalking) {
-      Animated.spring(scaleAnim, {
-        toValue: 0.95,
-        useNativeDriver: true,
-        speed: 50,
-        bounciness: 0,
-      }).start();
-    } else {
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        useNativeDriver: true,
-        speed: 30,
-        bounciness: 4,
-      }).start();
-      Animated.timing(glowAnim, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }).start();
-    }
-  }, [isTalking]);
-
-  // Drive glow from voice level
-  useEffect(() => {
-    if (!isTalking) return;
-    Animated.timing(glowAnim, {
-      toValue: voiceLevel,
-      duration: 80,
+    Animated.timing(press, {
+      toValue: isTalking ? 1 : 0,
+      duration: isTalking ? 60 : 120,
       useNativeDriver: true,
     }).start();
-  }, [voiceLevel, isTalking]);
+  }, [isTalking]);
 
-  const glowScale = glowAnim.interpolate({
+  const offset = press.interpolate({
     inputRange: [0, 1],
-    outputRange: [1, 1.25],
-  });
-
-  const glowOpacity = glowAnim.interpolate({
-    inputRange: [0, 0.2, 1],
-    outputRange: [0, 0.3, 0.8],
+    outputRange: [-SPACE.lift, 0],
   });
 
   return (
     <View style={styles.wrapper}>
-      {/* Voice-reactive glow ring */}
-      <Animated.View
-        style={[
-          styles.glow,
-          {
-            opacity: glowOpacity,
-            transform: [{ scale: glowScale }],
-          },
-        ]}
-      />
+      <View style={[styles.base, { backgroundColor: isTalking ? COLORS.redDeep : COLORS.paper }]} />
 
-      <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+      <Animated.View
+        style={[styles.fill, { transform: [{ translateX: offset }, { translateY: offset }] }]}
+      >
         <Pressable
           onPressIn={onPressIn}
           onPressOut={onPressOut}
+          accessibilityRole="button"
+          accessibilityLabel="Hold to talk"
+          accessibilityHint="Your voice plays through the connected speaker while you hold"
           style={[
-            styles.button,
-            {
-              backgroundColor: isTalking ? COLORS.onAir : COLORS.standby,
-              borderColor: isTalking
-                ? 'rgba(255, 58, 58, 0.5)'
-                : 'rgba(255, 255, 255, 0.05)',
-            },
+            styles.pad,
+            isTalking
+              ? { backgroundColor: COLORS.red, borderColor: COLORS.red }
+              : { backgroundColor: COLORS.panel, borderColor: COLORS.paper },
           ]}
         >
-          <Text
-            style={[
-              styles.label,
-              { color: isTalking ? '#fff' : COLORS.dimText },
-            ]}
-          >
-            {isTalking ? 'ON AIR' : 'HOLD\nTO TALK'}
+          <View style={styles.padTop}>
+            <Text style={[styles.meta, { color: isTalking ? '#fff' : COLORS.mute }]}>
+              {isTalking ? 'LIVE' : 'PUSH TO TALK'}
+            </Text>
+            <Text style={[styles.meta, { color: isTalking ? '#fff' : COLORS.mute }]}>
+              {durationSec} SEC DELAY
+            </Text>
+          </View>
+
+          <Text style={[styles.headline, { color: isTalking ? '#fff' : COLORS.paper }]}>
+            {isTalking ? "You're\nlive." : 'Hold\nto talk.'}
           </Text>
+
+          <LevelMeter
+            level={isTalking ? voiceLevel : 0}
+            onColor={COLORS.ink}
+            offColor={isTalking ? 'rgba(10,10,15,0.18)' : COLORS.line}
+          />
         </Pressable>
       </Animated.View>
     </View>
   );
 }
 
-const SIZE = SIZES.pttButton;
-
 const styles = StyleSheet.create({
   wrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1,
+    marginLeft: SPACE.lift,
+    marginTop: SPACE.lift,
   },
-  glow: {
-    position: 'absolute',
-    width: SIZE + 60,
-    height: SIZE + 60,
-    borderRadius: (SIZE + 60) / 2,
-    backgroundColor: COLORS.onAirGlow,
+  base: {
+    ...StyleSheet.absoluteFillObject,
   },
-  button: {
-    width: SIZE,
-    height: SIZE,
-    borderRadius: SIZE / 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
+  fill: {
+    flex: 1,
   },
-  label: {
-    fontSize: 18,
-    fontWeight: '800',
-    letterSpacing: 2,
-    textAlign: 'center',
-    lineHeight: 24,
+  pad: {
+    flex: 1,
+    borderWidth: SPACE.border,
+    padding: 20,
+    justifyContent: 'space-between',
+  },
+  padTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  meta: {
+    fontFamily: FONTS.heavy,
+    fontSize: 12,
+    letterSpacing: 2.5,
+  },
+  headline: {
+    fontFamily: FONTS.black,
+    fontSize: 64,
+    lineHeight: 64,
+    letterSpacing: -2.5,
   },
 });

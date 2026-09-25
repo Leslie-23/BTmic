@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--
+  HypeBox app icon + splash source. Render with ./render-icon.sh style commands:
+  icon.html?c=A&m=icon    1024x1024  opaque app icon (ink bg, full bleed, no pre-rounding)
+  icon.html?c=A&m=fg      1024x1024  Android adaptive foreground (transparent, mark in 66% safe zone)
+  icon.html?c=A&m=splash  1200x1200  splash mark + wordmark (transparent)
+  icon.html?c=A&m=fav     1024x1024  favicon master (tighter crop), downscale to 48x48 with sips
+  icon.html?m=sheet       concept contact sheet (A/B/C at 512 + 60px + 29px)
+-->
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;border-radius:0}
+:root{--ink:#0A0A0F;--paper:#F4F1EA;--red:#FF3A3A;--mute:#8A8A96}
+html,body{background:transparent;font-family:Inter,Helvetica,Arial,sans-serif;overflow:hidden}
+svg{display:block}
+.sheet{background:#1c1c24;padding:40px;display:flex;gap:40px;color:var(--paper);width:1800px;height:900px}
+.col{display:flex;flex-direction:column;gap:24px;align-items:flex-start}
+.col h3{font-weight:900;letter-spacing:4px}
+.row{display:flex;gap:24px;align-items:flex-end}
+.m{overflow:hidden;border-radius:22%}
+.splash{width:1200px;height:1200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:56px}
+.word{font-weight:900;font-size:104px;letter-spacing:14px;margin-right:-14px;color:var(--paper);line-height:1}
+.air{background:var(--red);color:#fff;font-weight:900;font-size:40px;letter-spacing:10px;padding:.5em .9em;line-height:1}
+</style></head><body>
+<script>
+const INK='#0A0A0F',PAPER='#F4F1EA',RED='#FF3A3A';
+// Every mark is drawn in a 1024 box. `bg` = whether to paint the full-bleed ink square.
+const marks={
+  // A: "H" monogram, red on-air block driven straight through the crossbar (the highlight block from the deck).
+  A:bg=>`${bg?`<rect width="1024" height="1024" fill="${INK}"/>`:''}
+    <rect x="232" y="232" width="176" height="560" fill="${PAPER}"/>
+    <rect x="616" y="232" width="176" height="560" fill="${PAPER}"/>
+    <rect x="232" y="436" width="560" height="152" fill="${RED}"/>`,
+  // B: on-air light — a hard paper block with the red record dot, offset stamp shadow.
+  B:bg=>`${bg?`<rect width="1024" height="1024" fill="${INK}"/>`:''}
+    <rect x="252" y="252" width="560" height="560" fill="${RED}"/>
+    <rect x="212" y="212" width="560" height="560" fill="${PAPER}"/>
+    <circle cx="492" cy="492" r="170" fill="${RED}"/>`,
+  // C: red panel, ink H whose legs are a mic grille of hard slats.
+  C:bg=>{let s=`${bg?`<rect width="1024" height="1024" fill="${RED}"/>`:''}`;
+    for(let i=0;i<7;i++){const y=232+i*84;s+=`<rect x="232" y="${y}" width="176" height="56" fill="${INK}"/><rect x="616" y="${y}" width="176" height="56" fill="${INK}"/>`}
+    return s+`<rect x="408" y="428" width="208" height="168" fill="${INK}"/>`;}
+};
+const svg=(c,size,bg,scale=1)=>{const o=512*(1-scale);
+  return `<svg width="${size}" height="${size}" viewBox="0 0 1024 1024" shape-rendering="crispEdges"><g transform="translate(${o} ${o}) scale(${scale})">${marks[c](bg)}</g></svg>`};
+const q=new URLSearchParams(location.search),c=q.get('c')||'A',m=q.get('m')||'sheet';
+// Mark A glyph spans 232..792 (560 = 55% of canvas); icon scales it to ~59%.
+// Adaptive fg: Android safe zone is a 66/108 circle (r~313px at 1024), so the square mark is scaled to
+// 448px (corners at r~317) — survives circle, squircle and rounded-square launcher masks.
+if(m==='icon')document.body.innerHTML=svg(c,1024,true,1.08);
+else if(m==='fav')document.body.innerHTML=svg(c,1024,true,1.25);
+else if(m==='fg')document.body.innerHTML=svg(c,1024,false,0.8);
+else if(m==='splash')document.body.innerHTML=`<div class="splash">${svg(c,520,false,1.6)}<div class="word">HYPEBOX</div></div>`;
+else{document.body.innerHTML=`<div class="sheet">${['A','B','C'].map(k=>`<div class="col"><h3>CONCEPT ${k}</h3>
+  <div class="m">${svg(k,480,true)}</div><div class="row"><div class="m">${svg(k,60,true)}</div><div class="m">${svg(k,40,true)}</div><div class="m">${svg(k,29,true)}</div></div></div>`).join('')}</div>`}
+</script>
+</body></html>

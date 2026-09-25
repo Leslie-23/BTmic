@@ -1,65 +1,166 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { COLORS } from '../constants/theme';
+import { View, Text, Pressable, StyleSheet, Linking } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, FONTS, SPACE } from '../constants/theme';
 
-export default function MicPermission({ onAllow }) {
+const STEPS = [
+  'Connect your Bluetooth speaker',
+  'Hold the button and talk',
+  'Your voice plays over the music',
+];
+
+export default function MicPermission({ onAllow, canAskAgain }) {
+  const handlePress = canAskAgain ? onAllow : () => Linking.openSettings();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.icon}>🎙</Text>
-      <Text style={styles.title}>Microphone Access</Text>
-      <Text style={styles.body}>
-        HypeBox needs your mic to broadcast your voice to the Bluetooth speaker.
-      </Text>
-      <Pressable
-        style={({ pressed }) => [
-          styles.button,
-          pressed && styles.buttonPressed,
-        ]}
-        onPress={onAllow}
-      >
-        <Text style={styles.buttonText}>Allow Mic</Text>
-      </Pressable>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.top}>
+        <Text style={styles.tag}>HYPEBOX</Text>
+        <Text style={styles.h1}>Your phone is now a</Text>
+        <View style={styles.mark}>
+          <Text style={[styles.h1, styles.markText]}>mic.</Text>
+        </View>
+        <Text style={styles.lead}>
+          Hold to talk and your voice comes out of the Bluetooth speaker, even
+          while the music keeps playing.
+        </Text>
+
+        <View style={styles.steps}>
+          {STEPS.map((step, i) => (
+            <View key={step} style={styles.step}>
+              <View style={styles.stepNum}>
+                <Text style={styles.stepNumText}>{i + 1}</Text>
+              </View>
+              <Text style={styles.stepText}>{step}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+
+      <View style={styles.bottom}>
+        {!canAskAgain && (
+          <Text style={styles.denied}>
+            Mic access is off. Turn it on in Settings to use HypeBox.
+          </Text>
+        )}
+        <Pressable
+          style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
+          onPress={handlePress}
+          accessibilityRole="button"
+        >
+          <Text style={styles.buttonText}>
+            {canAskAgain ? 'Continue' : 'Open Settings'}
+          </Text>
+          <Text style={styles.buttonArrow}>→</Text>
+        </Pressable>
+        <Text style={styles.note}>
+          The mic is only on while you hold the button. Nothing is uploaded.
+        </Text>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.ink,
+    paddingHorizontal: SPACE.gutter,
+    justifyContent: 'space-between',
+  },
+  top: {
+    paddingTop: 48,
+  },
+  tag: {
+    fontFamily: FONTS.heavy,
+    fontSize: 12,
+    letterSpacing: 4,
+    color: COLORS.mute,
+    marginBottom: 16,
+  },
+  h1: {
+    fontFamily: FONTS.black,
+    fontSize: 46,
+    lineHeight: 48,
+    letterSpacing: -1.8,
+    color: COLORS.paper,
+  },
+  mark: {
+    alignSelf: 'flex-start',
+    backgroundColor: COLORS.red,
+    paddingHorizontal: 6,
+    marginTop: 4,
+  },
+  markText: {
+    color: '#fff',
+  },
+  lead: {
+    fontFamily: FONTS.medium,
+    fontSize: 17,
+    lineHeight: 24,
+    color: COLORS.body,
+    marginTop: 20,
+  },
+  steps: {
+    marginTop: 32,
+    gap: 12,
+  },
+  step: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  stepNum: {
+    width: 26,
+    height: 26,
+    backgroundColor: COLORS.red,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 40,
   },
-  icon: {
-    fontSize: 48,
-    marginBottom: 24,
+  stepNumText: {
+    fontFamily: FONTS.black,
+    fontSize: 13,
+    color: '#fff',
   },
-  title: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: COLORS.text,
-    marginBottom: 12,
+  stepText: {
+    fontFamily: FONTS.semibold,
+    fontSize: 16,
+    color: COLORS.paper,
   },
-  body: {
-    fontSize: 15,
-    color: COLORS.dimText,
-    textAlign: 'center',
-    lineHeight: 22,
-    marginBottom: 32,
+  bottom: {
+    paddingBottom: 16,
+    gap: 14,
+  },
+  denied: {
+    fontFamily: FONTS.semibold,
+    fontSize: 14,
+    color: COLORS.red,
   },
   button: {
-    backgroundColor: COLORS.onAir,
-    paddingHorizontal: 32,
-    paddingVertical: 14,
-    borderRadius: 12,
+    height: 60,
+    backgroundColor: COLORS.paper,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
   },
   buttonPressed: {
-    opacity: 0.8,
+    backgroundColor: COLORS.body,
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '700',
+    fontFamily: FONTS.black,
+    fontSize: 18,
+    color: COLORS.ink,
+  },
+  buttonArrow: {
+    fontFamily: FONTS.black,
+    fontSize: 22,
+    color: COLORS.ink,
+  },
+  note: {
+    fontFamily: FONTS.medium,
+    fontSize: 13,
+    lineHeight: 18,
+    color: COLORS.mute,
   },
 });

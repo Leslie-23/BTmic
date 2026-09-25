@@ -1,0 +1,30 @@
+{
+  "cli": {
+    "version": ">= 16.0.0",
+    "appVersionSource": "local"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": false
+      }
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "REPLACE_ME: Apple ID email used for App Store Connect",
+        "ascAppId": "REPLACE_ME: numeric Apple ID from App Store Connect > App Information",
+        "appleTeamId": "REPLACE_ME: 10-char Team ID from developer.apple.com > Membership"
+      }
+    }
+  }
+}

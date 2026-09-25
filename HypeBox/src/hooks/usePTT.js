@@ -1,8 +1,14 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { Platform } from 'react-native';
 import { Audio } from 'expo-av';
+import { File } from 'expo-file-system';
 
 const DURATION_OPTIONS = [1, 2, 3, 4, 5];
+
+// Clips are throwaway; don't let them pile up in the cache
+function discardClip(uri) {
+  try { new File(uri).delete(); } catch {}
+}
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -10,6 +16,7 @@ function sleep(ms) {
 
 export default function usePTT() {
   const [hasPermission, setHasPermission] = useState(null);
+  const [canAskAgain, setCanAskAgain] = useState(true);
   const [isTalking, setIsTalking] = useState(false);
   const [error, setError] = useState(null);
   const [voiceLevel, setVoiceLevel] = useState(0);
@@ -26,8 +33,9 @@ export default function usePTT() {
 
   async function checkPermission() {
     try {
-      const { status } = await Audio.getPermissionsAsync();
-      setHasPermission(status === 'granted');
+      const res = await Audio.getPermissionsAsync();
+      setCanAskAgain(res.canAskAgain !== false);
+      setHasPermission(res.status === 'granted');
     } catch {
       setHasPermission(false);
     }
@@ -35,9 +43,10 @@ export default function usePTT() {
 
   async function requestPermission() {
     try {
-      const { status } = await Audio.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-      return status === 'granted';
+      const res = await Audio.requestPermissionsAsync();
+      setCanAskAgain(res.canAskAgain !== false);
+      setHasPermission(res.status === 'granted');
+      return res.status === 'granted';
     } catch {
       setHasPermission(false);
       return false;
@@ -56,7 +65,7 @@ export default function usePTT() {
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: true,
       playsInSilentModeIOS: true,
-      staysActiveInBackground: true,
+      staysActiveInBackground: false,
       playThroughEarpieceAndroid: false,
       shouldDuckAndroid: false,
       interruptionModeIOS: 0,
@@ -68,7 +77,7 @@ export default function usePTT() {
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
       playsInSilentModeIOS: true,
-      staysActiveInBackground: true,
+      staysActiveInBackground: false,
       playThroughEarpieceAndroid: false,
       shouldDuckAndroid: false,
       interruptionModeIOS: 0,
@@ -152,6 +161,7 @@ export default function usePTT() {
         // Clean up this sound
         try { await sound.unloadAsync(); } catch {}
         currentSoundRef.current = null;
+        discardClip(uri);
       } catch (err) {
         if (recording) {
           try { await recording.stopAndUnloadAsync(); } catch {}
@@ -160,6 +170,7 @@ export default function usePTT() {
           try { await currentSoundRef.current.unloadAsync(); } catch {}
           currentSoundRef.current = null;
         }
+        if (uri) discardClip(uri);
         if (isTalkingRef.current) {
           setError('Mic error — retrying...');
           await sleep(300);
@@ -194,6 +205,7 @@ export default function usePTT() {
 
   return {
     hasPermission,
+    canAskAgain,
     requestPermission,
     isTalking,
     voiceLevel,

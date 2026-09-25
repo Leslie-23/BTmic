@@ -1,22 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { COLORS } from '../constants/theme';
+import { COLORS, FONTS } from '../constants/theme';
 
 export default function StatusBadge({ isActive }) {
   return (
-    <View style={styles.container}>
-      <View
-        style={[
-          styles.dot,
-          { backgroundColor: isActive ? COLORS.onAir : COLORS.dimText },
-        ]}
-      />
-      <Text
-        style={[
-          styles.label,
-          { color: isActive ? COLORS.onAir : COLORS.dimText },
-        ]}
-      >
+    <View style={[styles.stamp, isActive ? styles.live : styles.idle]}>
+      <View style={[styles.dot, { backgroundColor: isActive ? '#fff' : COLORS.mute }]} />
+      <Text style={[styles.label, { color: isActive ? '#fff' : COLORS.mute }]}>
         {isActive ? 'ON AIR' : 'STANDBY'}
       </Text>
     </View>
@@ -24,21 +14,29 @@ export default function StatusBadge({ isActive }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  stamp: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
+    paddingHorizontal: 12,
+    height: 32,
+    borderWidth: 2,
+  },
+  idle: {
+    borderColor: COLORS.line,
+  },
+  live: {
+    backgroundColor: COLORS.red,
+    borderColor: COLORS.red,
   },
   dot: {
-    width: 8,
-    height: 8,
+    width: 7,
+    height: 7,
     borderRadius: 4,
     marginRight: 8,
   },
   label: {
-    fontSize: 14,
-    fontWeight: '700',
-    letterSpacing: 2,
+    fontFamily: FONTS.black,
+    fontSize: 12,
+    letterSpacing: 2.5,
   },
 });

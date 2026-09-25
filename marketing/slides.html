@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;border-radius:0}
+:root{--ink:#0A0A0F;--paper:#F4F1EA;--red:#FF3A3A;--mute:#8A8A96;
+ --w:1080px;--h:1350px;--pad:60px;--ph:780px;--ph3:700px;--h1:96px;--h2:72px;--lead:32px;--item:30px;--tag:22px;--gap:40px}
+.square{--w:1080px;--h:1080px;--pad:48px;--ph:540px;--ph3:500px;--h1:76px;--h2:58px;--lead:26px;--item:24px;--tag:18px;--gap:28px}
+.story{--w:1080px;--h:1920px;--pad:70px;--ph:1020px;--ph3:900px;--h1:110px;--h2:84px;--lead:36px;--item:34px;--tag:24px;--gap:44px}
+.landscape{--w:1920px;--h:1080px;--pad:60px;--h1:104px;--h2:78px;--lead:32px;--item:30px;--tag:22px;--gap:36px}
+
+html,body{width:var(--w);height:var(--h);overflow:hidden;background:var(--ink);font-family:Inter,Helvetica,Arial,sans-serif;color:var(--paper)}
+.slide{display:none;position:relative;width:var(--w);height:var(--h);padding:var(--pad);background:var(--ink)}
+.slide.on{display:flex;flex-direction:column}
+
+/* photo frame: hard edges, solid border */
+.ph{height:var(--ph);flex:none;border:4px solid var(--paper);display:flex;gap:4px;background:var(--paper);position:relative}
+.ph img{flex:1;min-width:0;height:100%;object-fit:cover;display:block}
+.s3 .ph{height:var(--ph3)}
+.s2 .ph{height:calc(var(--ph) - 100px)}
+.s3 .list li{font-size:calc(var(--item)*1.12)}
+.stamp{position:absolute;left:-4px;bottom:-4px;background:var(--red);color:#fff;font-weight:900;font-size:var(--tag);letter-spacing:3px;padding:.55em .9em}
+
+.txt{margin-top:var(--gap);display:flex;flex-direction:column;min-height:0;flex:1}
+.tag{align-self:flex-start;font-weight:800;font-size:var(--tag);letter-spacing:4px;color:var(--mute)}
+h1{font-size:var(--h1);line-height:1.02;font-weight:900;letter-spacing:-3px;margin-top:18px}
+h2{font-size:var(--h2);line-height:1.04;font-weight:900;letter-spacing:-2px;margin-top:18px}
+mark{display:inline-block;background:var(--red);color:#fff;padding:.02em .12em .08em;line-height:.92;margin-top:.1em}
+.lead{font-size:var(--lead);line-height:1.35;color:#C9C6BE;margin-top:22px;font-weight:500;max-width:960px}
+.list{list-style:none;margin-top:24px;display:flex;flex-direction:column;gap:10px}
+.list li{font-size:var(--item);font-weight:600;line-height:1.25;display:flex;gap:.6em}
+.list li b{flex:none;width:1.4em;height:1.4em;background:var(--red);color:#fff;font-size:.8em;display:flex;align-items:center;justify-content:center;margin-top:.05em}
+.list.x li b{background:none;color:var(--red);font-size:1em;width:auto;height:auto;margin:0}
+.fix{margin-top:auto;border-left:10px solid var(--red);padding:6px 0 6px 22px;font-size:calc(var(--item)*1.05);font-weight:800;line-height:1.25}
+.stores{display:flex;gap:16px;margin-top:auto}
+.store{border:4px solid var(--paper);padding:.45em .8em;font-size:calc(var(--item)*1.05);font-weight:900;line-height:1.1}
+.store small{display:block;font-size:.5em;letter-spacing:3px;font-weight:800;color:var(--mute);margin-bottom:4px}
+.store.fill{background:var(--paper);color:var(--ink)}
+.foot{position:absolute;right:var(--pad);top:calc(var(--pad) + 22px);font-weight:900;font-size:var(--tag);letter-spacing:4px;background:var(--ink);color:var(--paper);padding:.4em .7em;border:3px solid var(--paper)}
+
+/* story: photo full-bleed at top (behind platform UI is fine), text kept inside safe zone */
+.story .slide{padding:0}
+.story .ph{border:none;border-bottom:12px solid var(--red)}
+.story .txt{padding:56px 80px 340px}
+.story .foot{top:230px;right:40px}
+/* landscape: photo left, text right */
+.landscape .slide.on{flex-direction:row;gap:64px}
+.landscape .ph,.landscape .s3 .ph{height:auto;width:900px}
+.landscape .txt{margin-top:0;justify-content:center;padding:10px 0}
+.landscape .fix,.landscape .stores{margin-top:34px}
+.landscape .foot{top:auto;bottom:var(--pad);right:var(--pad)}
+.square .list{gap:6px;margin-top:16px}
+</style></head><body>
+
+<section class="slide s1" id="s1">
+ <div class="ph"><img src="photos/hook.jpg" style="object-position:62% 40%"><div class="stamp">● ON AIR</div></div>
+ <div class="txt">
+  <div class="tag">HYPEBOX</div>
+  <h1>Your phone is now a <mark>mic.</mark></h1>
+  <p class="lead">Hold to talk and your voice comes out of the Bluetooth speaker, even while the music keeps playing.</p>
+ </div>
+ <div class="foot">1/4</div>
+</section>
+
+<section class="slide s2" id="s2">
+ <div class="ph"><img src="photos/crowd.jpg" style="object-position:50% 45%"></div>
+ <div class="txt">
+  <div class="tag">THE PROBLEM</div>
+  <h2>Music's playing. You need to be <mark>heard.</mark></h2>
+  <ul class="list x">
+   <li><b>✕</b><span>No mic, no PA, just a Bluetooth speaker</span></li>
+   <li><b>✕</b><span>Shouting over the music doesn't work</span></li>
+   <li><b>✕</b><span>Pausing the playlist kills the vibe</span></li>
+  </ul>
+  <div class="fix">HypeBox turns the phone in your pocket into a mic for the speaker you already own.</div>
+ </div>
+ <div class="foot">2/4</div>
+</section>
+
+<section class="slide s3" id="s3">
+ <div class="ph"><img src="photos/phone.jpg" style="object-position:45% 40%"><img src="photos/speaker.jpg" style="object-position:40% 40%"></div>
+ <div class="txt">
+  <div class="tag">HOW IT WORKS</div>
+  <h2>Three steps to go <mark>live.</mark></h2>
+  <ul class="list">
+   <li><b>1</b><span>Connect any Bluetooth speaker</span></li>
+   <li><b>2</b><span>Hold the button and talk</span></li>
+   <li><b>3</b><span>Your voice plays over the music. No pausing, no ducking. Adjustable 1&#8209;5s&nbsp;delay.</span></li>
+  </ul>
+ </div>
+ <div class="foot">3/4</div>
+</section>
+
+<section class="slide s4" id="s4">
+ <div class="ph"><img src="photos/birthday.jpg" style="object-position:50% 38%"><div class="stamp">🎂 BIRTHDAY SHOUT-OUT</div></div>
+ <div class="txt">
+  <div class="tag">PARTIES · BIRTHDAYS · WORKOUTS · GAME DAY</div>
+  <h1>Hype the room. <mark>Anywhere.</mark></h1>
+  <div class="stores">
+   <div class="store fill"><small>COMING SOON</small>iOS · App Store</div>
+   <div class="store"><small>COMING SOON</small>Android · Google Play</div>
+  </div>
+ </div>
+ <div class="foot">4/4</div>
+</section>
+
+<script>
+var q=new URLSearchParams(location.search);
+document.documentElement.className=q.get('f')||'portrait';
+document.getElementById('s'+(q.get('s')||'1')).classList.add('on');
+</script>
+</body></html>
