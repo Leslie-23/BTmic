@@ -21,9 +21,8 @@
   "submit": {
     "production": {
       "ios": {
-        "appleId": "REPLACE_ME: Apple ID email used for App Store Connect",
-        "ascAppId": "REPLACE_ME: numeric Apple ID from App Store Connect > App Information",
-        "appleTeamId": "REPLACE_ME: 10-char Team ID from developer.apple.com > Membership"
+        "appleId": "leslieajayi27@gmail.com",
+        "appleTeamId": "LVQVXJXD2Z"
       }
     }
   }
